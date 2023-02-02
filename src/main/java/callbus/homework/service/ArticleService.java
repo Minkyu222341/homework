@@ -1,6 +1,7 @@
 package callbus.homework.service;
 
 import callbus.homework.domain.Article;
+import callbus.homework.domain.Heart;
 import callbus.homework.domain.Member;
 import callbus.homework.domain.MemberType;
 import callbus.homework.dto.ArticleRequestDto;
@@ -26,18 +27,20 @@ public class ArticleService {
     private final MemberTypeCheck memberTypeCheck;
 
 
-    public ResponseEntity<List<ArticleResponseDto>> getAllArticle(String userInfo) {
-        Long loginMemberId = memberTypeCheck.memberIdCheck(userInfo);
-        List<ArticleResponseDto> articleList = getArticleList(loginMemberId);
+    public ResponseEntity<List<ArticleResponseDto>> getAllArticles(String memberInfo) {
+        Long loginMemberId = memberTypeCheck.memberIdCheck(memberInfo);
+        List<ArticleResponseDto> articleList = memberIdCheckAndArticlesLookUp(loginMemberId);
         return ResponseEntity.ok().body(articleList);
     }
 
     public ResponseEntity<String> postArticle(String userInfo, ArticleRequestDto requestDto) {
         String memberType = memberTypeCheck.accountTypeCheck(userInfo);
-        return postArticle(userInfo, requestDto, memberType);
+        return memberTypeCheckAndSaveArticle(userInfo, requestDto, memberType);
     }
 
-    private List<ArticleResponseDto> getArticleList(Long loginMemberId) {
+
+
+    private List<ArticleResponseDto> memberIdCheckAndArticlesLookUp(Long loginMemberId) {
         List<Article> getAllArticle = articleRepository.findAll();
         List<ArticleResponseDto> articleList = new ArrayList<>();
         for (Article article : getAllArticle) {
@@ -53,11 +56,11 @@ public class ArticleService {
 
     private String getMemberNicknameAndType(Article article) {
         String accountType = "";
-        if (article.getMember().getAccount_type()== MemberType.REALTOR) {
+        if (article.getMember().getAccount_type() == MemberType.REALTOR) {
             accountType = "공인중개사";
-        } else if (article.getMember().getAccount_type()==MemberType.LESSOR) {
+        } else if (article.getMember().getAccount_type() == MemberType.LESSOR) {
             accountType = "임대인";
-        } else if (article.getMember().getAccount_type()==MemberType.LESSEE) {
+        } else if (article.getMember().getAccount_type() == MemberType.LESSEE) {
             accountType = "임차인";
         }
         return article.getMember().getNickname() + "(" + accountType + ")";
@@ -66,8 +69,7 @@ public class ArticleService {
     private boolean isCheckHeart(Long loginMemberId, Article article) {
         return heartRepository.existsByArticleAndMemberId(article, loginMemberId);
     }
-
-    private ResponseEntity<String> postArticle(String userInfo, ArticleRequestDto requestDto, String memberType) {
+    private ResponseEntity<String> memberTypeCheckAndSaveArticle(String userInfo, ArticleRequestDto requestDto, String memberType) {
         if (memberType.equals("ANONYMOUS")) {
             return ResponseEntity.badRequest().body(Msg.ACCESS_DENIED.getMsg());
         } else {
@@ -81,5 +83,7 @@ public class ArticleService {
             return ResponseEntity.ok().body(Msg.WRITE_SUCCESS.getMsg());
         }
     }
+
+
 
 }
