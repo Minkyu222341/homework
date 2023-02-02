@@ -2,6 +2,7 @@ package callbus.homework.service;
 
 import callbus.homework.domain.Article;
 import callbus.homework.domain.Member;
+import callbus.homework.domain.MemberType;
 import callbus.homework.dto.ArticleRequestDto;
 import callbus.homework.dto.ArticleResponseDto;
 import callbus.homework.msg.Msg;
@@ -51,7 +52,15 @@ public class ArticleService {
     }
 
     private String getMemberNicknameAndType(Article article) {
-        return article.getMember().getNickname() + "("+ article.getMember().getAccount_type()+")";
+        String accountType = "";
+        if (article.getMember().getAccount_type()== MemberType.REALTOR) {
+            accountType = "공인중개사";
+        } else if (article.getMember().getAccount_type()==MemberType.LESSOR) {
+            accountType = "임대인";
+        } else if (article.getMember().getAccount_type()==MemberType.LESSEE) {
+            accountType = "임차인";
+        }
+        return article.getMember().getNickname() + "(" + accountType + ")";
     }
 
     private boolean isCheckHeart(Long loginMemberId, Article article) {
