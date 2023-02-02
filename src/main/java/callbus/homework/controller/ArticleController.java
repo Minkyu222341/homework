@@ -21,11 +21,12 @@ public class ArticleController {
         return articleService.getAllArticle(authentication);
     }
 
-//    @PostMapping("/article")
-//    public ResponseEntity<String> postArticle(@RequestHeader("Authorization") String userType,
-//                                              @RequestBody ArticleRequestDto requestDto) {
-//        return articleService.postArticle(userType,requestDto);
-//    }
+    @PostMapping("/article")
+    public ResponseEntity<String> postArticle(HttpServletRequest servletRequest,
+                                              @RequestBody ArticleRequestDto requestDto) {
+        String authentication = servletRequest.getHeader("Authentication");
+        return articleService.postArticle(authentication, requestDto);
+    }
 
 
 }
