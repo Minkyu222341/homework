@@ -10,5 +10,5 @@ public class ArticleResponseDto {
     private String title;
     private Integer heartCount;
     private Boolean isHeart;
-    private MemberType account_type;
+    private String memberNicknameAndType;
 }

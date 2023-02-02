@@ -43,11 +43,15 @@ public class ArticleService {
             articleList.add(ArticleResponseDto.builder()
                     .title(article.getTitle())
                     .heartCount(article.getHeartList().size())
-                    .account_type(article.getMember().getAccount_type())
+                    .memberNicknameAndType(getMemberNicknameAndType(article))
                     .isHeart(isCheckHeart(loginMemberId, article))
                     .build());
         }
         return articleList;
+    }
+
+    private String getMemberNicknameAndType(Article article) {
+        return article.getMember().getNickname() + "("+ article.getMember().getAccount_type()+")";
     }
 
     private boolean isCheckHeart(Long loginMemberId, Article article) {
