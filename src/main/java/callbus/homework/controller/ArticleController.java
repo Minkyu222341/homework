@@ -3,7 +3,6 @@ package callbus.homework.controller;
 import callbus.homework.dto.ArticleRequestDto;
 import callbus.homework.dto.ArticleResponseDto;
 import callbus.homework.service.ArticleService;
-import callbus.homework.service.HeartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +35,12 @@ public class ArticleController {
                                                             @RequestBody ArticleRequestDto requestDto) {
         String memberInfo = servletRequest.getHeader("Authentication");
         return articleService.updateArticle(memberInfo,articleId,requestDto);
+    }
+
+    @DeleteMapping("{articleId}")
+    public ResponseEntity<String> deleteArticle(HttpServletRequest servletRequest,
+                                                @PathVariable Long articleId) {
+        String memberInfo = servletRequest.getHeader("Authentication");
+        return articleService.delete(memberInfo,articleId);
     }
 }

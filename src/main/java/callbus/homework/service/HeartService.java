@@ -63,4 +63,5 @@ public class HeartService {
                 orElseThrow(() -> new IllegalArgumentException(Msg.UNKNOWN_MEMBER.getMsg()));
         return member.getNickname() + " 님이 " + article.getId() + " 번째 게시글을 추천했습니다.";
     }
+
 }

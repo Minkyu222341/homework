@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Msg {
+    DELETED_SUCCESS("삭제되었습니다."),
     ANONYMOUS_USER("로그인하지 않은 사용자"),
     UPDATE_SUCCESS("수정되었습니다."),
     ALREADY_HEART("이미 추천한 게시글입니다."),

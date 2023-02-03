@@ -1,6 +1,5 @@
 package callbus.homework.dto;
 
-import callbus.homework.domain.MemberType;
 import lombok.Builder;
 import lombok.Getter;
 

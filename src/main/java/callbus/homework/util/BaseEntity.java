@@ -1,6 +1,5 @@
 package callbus.homework.util;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -21,6 +20,7 @@ public class BaseEntity {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    private LocalDateTime deletedTime;
+    private LocalDateTime deletedAt;
+
 
 }

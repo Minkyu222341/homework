@@ -17,6 +17,6 @@ spring:
     properties:
       hibernate:
         ddl-auto: none
-        show_sql: true #sql 문이 보이도록
-        format_sql: true  #sql 계층식 표현
+#        show_sql: true #sql 문이 보이도록
+#        format_sql: true  #sql 계층식 표현
     defer-datasource-initialization: true

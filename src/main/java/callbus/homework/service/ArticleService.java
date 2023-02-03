@@ -59,6 +59,24 @@ public class ArticleService {
         return ResponseEntity.ok().body(Msg.UPDATE_SUCCESS.getMsg());
     }
 
+    @Transactional
+    public ResponseEntity<String> delete(String memberInfo, Long articleId) {
+        Long loginMemberId = memberTypeCheck.memberIdCheck(memberInfo);
+        if (loginMemberId == -1L) {
+            return ResponseEntity.badRequest().body(Msg.ANONYMOUS_USER.getMsg());
+        }
+        Member loginMember = getLoginMember(memberInfo);
+        Article article = articleRepository.findById(articleId).
+                orElseThrow(() -> new IllegalArgumentException(Msg.UNKNOWN_ARTICLE.getMsg()));
+
+        if (article.getMember() != loginMember) {
+            return ResponseEntity.badRequest().body(Msg.ACCESS_DENIED.getMsg());
+        }
+
+        articleRepository.delete(article);
+        return ResponseEntity.ok().body(Msg.DELETED_SUCCESS.getMsg());
+    }
+
 
 
     private List<ArticleResponseDto> memberIdCheckAndArticlesLookUp(Long loginMemberId) {
@@ -98,7 +116,6 @@ public class ArticleService {
         } else {
             Article article = Article.builder().title(requestDto.getTitle())
                     .member(getLoginMember(memberInfo))
-                    .deleted(false)
                     .build();
             articleRepository.save(article);
             return ResponseEntity.ok().body(Msg.WRITE_SUCCESS.getMsg());
@@ -110,5 +127,6 @@ public class ArticleService {
         return memberRepository.findById(loginMemberId).
                 orElseThrow(() -> new IllegalArgumentException(Msg.UNKNOWN_MEMBER.getMsg()));
     }
+
 
 }
