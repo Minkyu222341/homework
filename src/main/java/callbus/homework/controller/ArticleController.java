@@ -19,18 +19,22 @@ public class ArticleController {
 
     @GetMapping
     public ResponseEntity<List<ArticleResponseDto>> getAllArticles(HttpServletRequest servletRequest) {
-        String authentication = servletRequest.getHeader("Authentication");
-        return articleService.getAllArticles(authentication);
+        String memberInfo = servletRequest.getHeader("Authentication");
+        return articleService.getAllArticles(memberInfo);
     }
 
     @PostMapping
     public ResponseEntity<String> postArticle(HttpServletRequest servletRequest,
                                               @RequestBody ArticleRequestDto requestDto) {
-        String authentication = servletRequest.getHeader("Authentication");
-        return articleService.postArticle(authentication, requestDto);
+        String memberInfo = servletRequest.getHeader("Authentication");
+        return articleService.postArticle(memberInfo, requestDto);
     }
 
-
-
-
+    @PatchMapping("/{articleId}")
+    public ResponseEntity<String> updateArticle(HttpServletRequest servletRequest,
+                                                            @PathVariable Long articleId,
+                                                            @RequestBody ArticleRequestDto requestDto) {
+        String memberInfo = servletRequest.getHeader("Authentication");
+        return articleService.updateArticle(memberInfo,articleId,requestDto);
+    }
 }

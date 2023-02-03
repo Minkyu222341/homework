@@ -1,5 +1,6 @@
 package callbus.homework.domain;
 
+import callbus.homework.dto.ArticleRequestDto;
 import callbus.homework.util.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,5 +36,9 @@ public class Article extends BaseEntity {
         this.deleted = deleted;
         this.member = member;
         this.heartList = heartList;
+    }
+
+    public void update(ArticleRequestDto articleRequestDto) {
+        this.title = articleRequestDto.getTitle();
     }
 }
