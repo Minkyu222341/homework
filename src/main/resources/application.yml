@@ -4,19 +4,16 @@ spring:
       enabled: true
 
   datasource:
-    driver-class-name: org.h2.Driver # h2 드라이버 설정
-    url: jdbc:h2:mem:testdb # jdbc url 설정 (in-memory db 설정)
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
     username: sa
     password:
-    platform: h2 # datasource 타입 플랫폼 정의
-    data: classpath:db/h2/data.sql # 앞서 작성한 sql 파일경로
-#    defer-datasource-initialization: true
+    platform: h2
+    data: classpath:db/h2/data.sql
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect # 방언설정
+    database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
         ddl-auto: none
-#        show_sql: true #sql 문이 보이도록
-#        format_sql: true  #sql 계층식 표현
     defer-datasource-initialization: true
