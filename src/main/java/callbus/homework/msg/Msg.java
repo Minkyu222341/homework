@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Msg {
+    WITHDRAWAL_MEMBER("탈퇴한 사용자입니다."),
     DELETED_SUCCESS("삭제되었습니다."),
     ANONYMOUS_USER("로그인하지 않은 사용자"),
     UPDATE_SUCCESS("수정되었습니다."),

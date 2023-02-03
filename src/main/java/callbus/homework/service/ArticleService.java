@@ -33,10 +33,16 @@ public class ArticleService {
         return ResponseEntity.ok().body(articleList);
     }
 
-    public ResponseEntity<String> postArticle(String userInfo, ArticleRequestDto requestDto) {
-        String memberType = memberTypeCheck.accountTypeCheck(userInfo);
-        return memberTypeCheckAndSaveArticle(userInfo, requestDto, memberType);
+    public ResponseEntity<String> postArticle(String memberInfo, ArticleRequestDto requestDto) {
+        String memberType = memberTypeCheck.accountTypeCheck(memberInfo);
+        boolean isWithdrawal = withdrawalMemberCheck(memberInfo);
+        if (isWithdrawal) {
+            return ResponseEntity.badRequest().body(Msg.WITHDRAWAL_MEMBER.getMsg());
+        }
+        return memberTypeCheckAndSaveArticle(memberInfo, requestDto, memberType);
     }
+
+
 
     @Transactional
     public ResponseEntity<String> updateArticle(String memberInfo,
@@ -47,7 +53,10 @@ public class ArticleService {
         if (loginMemberId == -1L) {
             return ResponseEntity.badRequest().body(Msg.ANONYMOUS_USER.getMsg());
         }
-
+        boolean isWithdrawal = withdrawalMemberCheck(memberInfo);
+        if (isWithdrawal) {
+            return ResponseEntity.badRequest().body(Msg.WITHDRAWAL_MEMBER.getMsg());
+        }
         Member loginMember = getLoginMember(memberInfo);
         Article article = articleRepository.findById(articleId).
                 orElseThrow(() -> new IllegalArgumentException(Msg.UNKNOWN_ARTICLE.getMsg()));
@@ -64,6 +73,10 @@ public class ArticleService {
         Long loginMemberId = memberTypeCheck.memberIdCheck(memberInfo);
         if (loginMemberId == -1L) {
             return ResponseEntity.badRequest().body(Msg.ANONYMOUS_USER.getMsg());
+        }
+        boolean isWithdrawal = withdrawalMemberCheck(memberInfo);
+        if (isWithdrawal) {
+            return ResponseEntity.badRequest().body(Msg.WITHDRAWAL_MEMBER.getMsg());
         }
         Member loginMember = getLoginMember(memberInfo);
         Article article = articleRepository.findById(articleId).
@@ -128,5 +141,9 @@ public class ArticleService {
                 orElseThrow(() -> new IllegalArgumentException(Msg.UNKNOWN_MEMBER.getMsg()));
     }
 
+    private boolean withdrawalMemberCheck(String memberInfo) {
+        Member loginMember = getLoginMember(memberInfo);
+        return loginMember.getQuit();
+    }
 
 }

@@ -27,6 +27,10 @@ public class HeartService {
 
     public ResponseEntity<String> addHeart(Long articleId, String memberInfo) {
         Long loginMemberId = memberTypeCheck.memberIdCheck(memberInfo);
+        boolean isWithdrawal = withdrawalMemberCheck(memberInfo);
+        if (isWithdrawal) {
+            return ResponseEntity.badRequest().body(Msg.WITHDRAWAL_MEMBER.getMsg());
+        }
         return heartStatusCheck(loginMemberId, articleId);
     }
 
@@ -64,4 +68,14 @@ public class HeartService {
         return member.getNickname() + " 님이 " + article.getId() + " 번째 게시글을 추천했습니다.";
     }
 
+    private boolean withdrawalMemberCheck(String memberInfo) {
+        Member loginMember = getLoginMember(memberInfo);
+        return loginMember.getQuit();
+    }
+
+    private Member getLoginMember(String memberInfo) {
+        Long loginMemberId = memberTypeCheck.memberIdCheck(memberInfo);
+        return memberRepository.findById(loginMemberId).
+                orElseThrow(() -> new IllegalArgumentException(Msg.UNKNOWN_MEMBER.getMsg()));
+    }
 }
